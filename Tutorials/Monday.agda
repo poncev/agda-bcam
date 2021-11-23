@@ -17,13 +17,13 @@ module Tutorials.Monday where
 -- If in emacs, we can put the cursor over a characted and use M-x describe-char to see how that character is inputted
 -- ⊥ is written using \bot
 data ⊥ : Set where
-  -- AKA the empty set, bottom, falsehood, the absurd type, the empty type, the initial object
+  -- AKA the empty set, bottom, falsehood, the absurd type, the empty type, the initial element
   -- ⊥ : Set means ⊥ is a Type (Set = Type, for historical reasons)
   -- The data keyword creates a data type where we list all the constructors of the types
   -- ⊥ has no constructors: there is no way of making something of type ⊥
 
 record ⊤ : Set where
-  -- AKA the singleton set, top, truth, the trivial type, the unit type, the terminal object
+  -- AKA the singleton set, top, truth, the trivial type, the unit type, the terminal element
   -- The record keyword creates a record type
   -- Records have a single constructor
   -- To create a record you must populate all of its fields
@@ -95,7 +95,7 @@ module Simple where
   -- The first line below gives the type of the function get-fst
   -- The second line gives its definition
   get-fst : {A : Set} {B : Set} → A × B → A
-  get-fst x = {!!}
+  get-fst (a , b) = a
 
   -- Agda is an *interactive* proof assistant
   -- We don't provide our proofs/programs all at once: we develop them iteratively
@@ -111,7 +111,7 @@ module Simple where
   -- ctrl+c ctrl+a     try to automatically fulfill the goal
   -- key bindings: https://agda.readthedocs.io/en/v2.6.1.3/getting-started/quick-guide.html
   get-snd : ∀ {A B} → A × B → B
-  get-snd x = {!!}
+  get-snd (a , b) = b
 
   -- The variable keyword enables us to declare convention for notation
   -- Unless said otherwise, whenever we refer to A, B or C and these are not bound, we will refer to objects of type Set
@@ -121,28 +121,31 @@ module Simple where
 
   -- Notice how we don't have to declare A, B and C anymore
   curry : (A → B → C) → (A × B → C)
-  curry f = {!!}
+  curry f (a , b) = f(a)(b)
 
   uncurry : (A × B → C) → (A → B → C)
-  uncurry f = {!!}
+  uncurry f a b = f(a , b)
 
   ×-comm : A × B → B × A
-  ×-comm = {!!}
+  ×-comm (a , b) = (b , a)
 
   ×-assoc : (A × B) × C → A × (B × C)
-  ×-assoc = {!!}
+  ×-assoc ((a , b) , c) = (a , (b , c))
 
   -- Pattern matching has to be exhaustive: all cases must be addressed
   ⊎-comm : A ⊎ B → B ⊎ A
-  ⊎-comm = {!!}
+  ⊎-comm (inl x) = inr x
+  ⊎-comm (inr x) = inl x
 
   ⊎-assoc : (A ⊎ B) ⊎ C → A ⊎ (B ⊎ C)
-  ⊎-assoc = {!!}
+  ⊎-assoc (inl (inl x)) = inl x
+  ⊎-assoc (inl (inr x)) = inr (inl x)
+  ⊎-assoc (inr x) = inr (inr x)
 
   -- If there are no cases to be addressed there is nothing for us left to do
   -- If you believe ⊥ exist you believe anything
   absurd : ⊥ → A
-  absurd a = {!!}
+  absurd ()
 
   -- In constructive mathematics all proofs are constructions
   -- How do we show that an object of type A cannot possibly be constructed, while using a construction to show so?
@@ -155,18 +158,18 @@ module Simple where
   -- The proof ¬ ¬ A is a function that takes (A → ⊥) into ⊥, and offers no witness for A
   -- The opposite direction is however constructive:
   ⇒¬¬ : A → ¬ ¬ A
-  ⇒¬¬ = {!!}
+  ⇒¬¬ a f = f(a)
 
   -- Moreover, double negation can be eliminated from non-witnesses
   ¬¬¬⇒¬ : ¬ ¬ ¬ A → ¬ A
-  ¬¬¬⇒¬ = {!!}
+  ¬¬¬⇒¬ f a = {!!}
 
   -- Here we have a choice of two programs to write
   ×-⇒-⊎₁ : A × B → A ⊎ B
-  ×-⇒-⊎₁ = {!!}
+  ×-⇒-⊎₁ (a , b) = inr b
 
   ×-⇒-⊎₂ : A × B → A ⊎ B
-  ×-⇒-⊎₂ = {!!}
+  ×-⇒-⊎₂ (a , b) = inl a
 
   -- A little more involved
   -- Show that the implication (A ⊎ B → A × B) is not always true for all A and Bs
@@ -383,7 +386,6 @@ n < m = suc n ≤ m
 -- It has a single constructor refl which limits the ways of making something of type x ≡ y to those where x and y are in fact the same, i.e. x ≡ x
 -- When we pattern match against something of type x ≡ y, the constructor refl will make x and y unify: Agda will internalise the equality
 infix 10 _≡_
--- \== ≡
 data _≡_ : A → A → Set where
   refl : {x : A} → x ≡ x
 
@@ -394,10 +396,6 @@ data _≡_ : A → A → Set where
 -- Because of the way in which defined _+_, zero + x ≡ x holds definitionally (the first case in the definition)
 +-idˡ : ∀ x → (zero + x) ≡ x
 +-idˡ x = {!!}
-
--- We show that equality respects congruence
-cong : {x y : A} (f : A → B) → x ≡ y → f x ≡ f y
-cong f p = {!!}
 
 -- However this does not hold definitionally
 -- We need to use proof by induction
@@ -411,6 +409,10 @@ sym p = {!!}
 
 trans : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans p q = {!!}
+
+-- We show that equality respects congruence
+cong : {x y : A} (f : A → B) → x ≡ y → f x ≡ f y
+cong f p = {!!}
 
 -- A binary version that will come in use later on
 cong₂ : {x y : A} {w z : B} (f : A → B → C) → x ≡ y → w ≡ z → f x w ≡ f y z
@@ -461,3 +463,4 @@ _∎ _ = refl
   (x + suc y)  ≡⟨ {!!} ⟩
   suc (x + y)  ≡⟨ {!!} ⟩
   suc (y + x)  ∎
+ 
