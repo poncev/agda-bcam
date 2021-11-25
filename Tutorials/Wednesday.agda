@@ -32,7 +32,10 @@ module Isomorphism where
   Σ-⊎-≅ = {!!}
 
   Σ-×-≅ : Σ-× A B ≅ A × B
-  Σ-×-≅ = {!!}
+  to Σ-×-≅ = {!   !}
+  from Σ-×-≅ = {!   !}
+  from∘to Σ-×-≅ = {!   !}
+  to∘from Σ-×-≅ = {!   !}
 
   Π-→-≅ : Π-→ A B ≅ (A → B)
   to Π-→-≅ = {!!}
@@ -48,7 +51,10 @@ module Isomorphism where
     extensionality : {P : A → Set} {f g : (a : A) → P a} → (∀ x → f x ≡ g x) → f ≡ g
 
   Π-×-≅ : Π-× A B ≅ A × B
-  Π-×-≅ = {!!}
+  to Π-×-≅ f = (f true) , (f false)
+  from Π-×-≅ = {!   !}
+  from∘to Π-×-≅ = {!   !}
+  to∘from Π-×-≅ = {!   !}
 
   curry : Π-→ A (Π-→ B C) → Π-→ (Σ-× A B) C
   curry f (a , b) = f a b

@@ -20,7 +20,7 @@ module Product where
 
   -- Pi types: dependent function types
   -- For every x of type A, the predicate P x holds
-  Π : (A : Set) → (A → Set) → Set
+  Π : (A : Set) → (Pred A) → Set
   Π A P = (x : A) → P x
 
   infix 5 _,_
@@ -103,5 +103,5 @@ module Product where
   Fin-to-≤ i = {!!}
 
   ≤-to-Fin : n < m → Σ[ i ∈ Fin m ] to-ℕ i ≡ n
-  ≤-to-Fin i = {!!}
+  ≤-to-Fin (s≤s i) = {!!}
 

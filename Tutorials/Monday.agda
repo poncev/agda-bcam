@@ -391,28 +391,29 @@ data _≡_ : A → A → Set where
 
 -- Definitional equality holds when the two sides compute to the same symbols
 2+2≡4 : 2 + 2 ≡ 4
-2+2≡4 = {!!}
+2+2≡4 = refl
 
 -- Because of the way in which defined _+_, zero + x ≡ x holds definitionally (the first case in the definition)
 +-idˡ : ∀ x → (zero + x) ≡ x
-+-idˡ x = {!!}
++-idˡ x = refl
+
+-- We show that equality respects congruence
+cong : {x y : A} (f : A → B) → x ≡ y → f x ≡ f y
+cong f p = {!!}
 
 -- However this does not hold definitionally
 -- We need to use proof by induction
 -- We miss some pieces to prove this
 +-idʳ : ∀ x → (x + zero) ≡ x
-+-idʳ x = {!!}
++-idʳ zero = refl
++-idʳ (suc x) = {!!}
 
 -- Propositional equality is reflexive by construction, here we show it is also symmetric and transitive
 sym : {x y : A} → x ≡ y → y ≡ x
-sym p = {!!}
+sym refl = {!!}
 
 trans : {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans p q = {!!}
-
--- We show that equality respects congruence
-cong : {x y : A} (f : A → B) → x ≡ y → f x ≡ f y
-cong f p = {!!}
 
 -- A binary version that will come in use later on
 cong₂ : {x y : A} {w z : B} (f : A → B → C) → x ≡ y → w ≡ z → f x w ≡ f y z
@@ -428,12 +429,13 @@ subst eq p = {!!}
 
 -- Introduce underscores on the RHS
 +-comm : ∀ x y → x + y ≡ y + x
-+-comm x zero = {!!}
-+-comm x (suc y) = {!!}
++-comm x zero = +-idʳ _
++-comm x (suc y) = trans (+-suc _ _) {!   !}
   -- The keyword where allows us to introduce local definitions
   where
   +-suc : ∀ x y → x + suc y ≡ suc (x + y)
-  +-suc x y = {!!}
+  +-suc zero y = refl
+  +-suc (suc x) y = {!+-suc x y!}
 
 
 -----------
